@@ -22,6 +22,7 @@ private data class RankingResponse(val stocks: List<RankingStock> = emptyList())
 private data class RankingStock(
     val itemCode: String? = null,
     val stockName: String? = null,
+    val stockEndType: String? = null,
     val marketValueRaw: String? = null,
     val accumulatedTradingVolumeRaw: String? = null,
     val fluctuationsRatio: String? = null,
@@ -48,6 +49,9 @@ class NaverStockRankingClient(
             .body(RankingResponse::class.java) ?: return emptyList()
 
         return response.stocks.mapNotNull { stock ->
+            // 이 엔드포인트는 코스피/코스닥에 상장된 ETF도 함께 내려준다 — ETF는 별도 카테고리
+            // 랭킹(DiscoveryService.topEtfs)에서 다루므로 순수 주식만 남긴다.
+            if (stock.stockEndType != null && stock.stockEndType != "stock") return@mapNotNull null
             val symbol = stock.itemCode ?: return@mapNotNull null
             val name = stock.stockName ?: return@mapNotNull null
             StockRanking(
