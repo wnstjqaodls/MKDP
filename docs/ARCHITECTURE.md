@@ -12,6 +12,8 @@ flowchart LR
     S -->|list.json| D
     S -->|fnlttSinglAcnt.json| D
     S -->|corpCode.xml, 주1회| D
+    S -->|일별 시세, 온디맨드 캐시| V[네이버 금융]
+    S -->|ETF 목록| V
     Cache[Caffeine 캐시] --- S
 ```
 
@@ -23,12 +25,26 @@ Spring Boot jar 하나에 번들된다. nginx는 TLS 종료 이후의 단순 리
 
 ```text
 com.mkdp
-├─ api/            REST 컨트롤러 (CompanyController, AdminSyncController), 예외 핸들러, SPA 폴백
-├─ config/         DartProperties, MkdpProperties, RestClientConfig, CacheConfig
-├─ dart/           DartClient(외부 호출 유일 지점), CorpCodeZipParser, 예외, DTO
-├─ domain/         CompanyService, DisclosureService, FinancialService, CorpCodeSyncService
-└─ db/             CompanyRepository, SyncLogRepository (JdbcTemplate, ORM 없음)
+├─ api/            REST 컨트롤러 (CompanyController, AssetController, BacktestController,
+│                  AdminSyncController), 예외 핸들러
+├─ config/         DartProperties, NaverFinanceProperties, MkdpProperties, RestClientConfig,
+│                  CacheConfig, SpaWebConfig(SPA 폴백)
+├─ dart/           DartClient(DART 호출 유일 지점), CorpCodeZipParser, 예외, DTO
+├─ price/          NaverPriceClient(일별 시세), NaverEtfListClient(ETF 유니버스)
+├─ domain/         CompanyService, DisclosureService, FinancialService, CorpCodeSyncService,
+│                  EtfSyncService, PriceSyncService, AssetSearchService, BacktestService
+└─ db/             CompanyRepository, EtfRepository, PriceHistoryRepository, SyncLogRepository류
+                  (JdbcTemplate, ORM 없음)
 ```
+
+**ETF는 DART 기업 마스터에 없다.** ETF는 신탁 구조라 DART 공시 대상 법인이
+아니어서 `corpCode.xml`에 포함되지 않는다. 그래서 `etf` 테이블은 별도로
+네이버 금융 ETF 목록에서 동기화한다 — `AssetSearchService`가 `company`와 `etf`
+두 테이블을 합쳐 통합 검색 결과를 만든다.
+
+**가격은 온디맨드로 캐시한다.** 백테스트 요청이 들어올 때 해당 심볼·기간의
+시세가 `price_history`에 이미 커버되는지 확인하고, 없으면 그때 네이버에서
+가져와 채운다 — 매번 외부 호출을 하지 않기 위함이다(`PriceSyncService`).
 
 ### 핵심 설계 결정
 
@@ -86,6 +102,21 @@ sequenceDiagram
     end
     API->>DB: corp_code_sync_log 기록
 ```
+
+## 포트폴리오 백테스트
+
+`BacktestService`는 매수 후 보유(buy & hold)를 가정한다 — 시작일에 목표 비중대로
+1회 매수하고 리밸런싱 없이 그대로 보유. 계산 절차:
+
+1. 담은 각 종목의 `startDate~endDate` 시세를 `PriceSyncService`로 확보(캐시 우선)
+2. 모든 종목의 거래일 교집합을 공통 타임라인으로 사용(주식/ETF마다 상장일·휴장일이
+   다를 수 있으므로)
+3. 첫 공통 거래일 가격으로 종목별 매수 수량 계산 (`초기금액 × 비중 / 시작가`)
+4. 각 거래일의 포트폴리오 가치 = Σ(수량 × 그날 종가)
+5. 총수익률, CAGR(연복리 환산), MDD(최대 낙폭 — 고점 대비 최대 하락폭)를 산출
+
+비중은 합이 100이 아니어도 된다 — 서버가 합계로 정규화한다. 리밸런싱 옵션,
+샤프 지수, 벤치마크 비교는 이후 과제로 남겼다.
 
 ## 배포
 
