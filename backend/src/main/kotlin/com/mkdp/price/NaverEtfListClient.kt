@@ -6,10 +6,14 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import java.nio.charset.Charset
 
+/** [tabCode] — 네이버 ETF 탭 분류: 1=국내지수 2=국내업종/테마 3=국내파생 4=해외주식 5=원자재 6=채권 7=기타. */
 data class EtfSummary(
     val symbol: String,
     val name: String,
     val nav: Double?,
+    val tabCode: Int?,
+    val marketSum: Long?,
+    val quant: Long?,
 )
 
 /**
@@ -41,7 +45,10 @@ class NaverEtfListClient(
             val symbol = node.path("itemcode").asText(null) ?: return@mapNotNull null
             val name = node.path("itemname").asText(null) ?: return@mapNotNull null
             val nav = node.path("nav").let { if (it.isMissingNode || it.isNull) null else it.asDouble() }
-            EtfSummary(symbol = symbol, name = name, nav = nav)
+            val tabCode = node.path("etfTabCode").let { if (it.isMissingNode || it.isNull) null else it.asInt() }
+            val marketSum = node.path("marketSum").let { if (it.isMissingNode || it.isNull) null else it.asLong() }
+            val quant = node.path("quant").let { if (it.isMissingNode || it.isNull) null else it.asLong() }
+            EtfSummary(symbol = symbol, name = name, nav = nav, tabCode = tabCode, marketSum = marketSum, quant = quant)
         }
     }
 }

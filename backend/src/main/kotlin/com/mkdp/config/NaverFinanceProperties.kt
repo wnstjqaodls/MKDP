@@ -13,4 +13,5 @@ import org.springframework.context.annotation.Configuration
 class NaverFinanceProperties {
     var priceBaseUrl: String = "https://api.finance.naver.com"
     var etfListBaseUrl: String = "https://finance.naver.com"
+    var rankingBaseUrl: String = "https://m.stock.naver.com"
 }

@@ -35,8 +35,8 @@ class NaverEtfListClientTest {
     fun `decodes the EUC-KR response into etf summaries`() {
         val json = """
             {"resultCode":"success","result":{"etfItemList":[
-                {"itemcode":"069500","itemname":"KODEX 200","nav":104324.0},
-                {"itemcode":"360750","itemname":"TIGER 미국S&P500","nav":27320.0}
+                {"itemcode":"069500","itemname":"KODEX 200","nav":104324.0,"etfTabCode":1,"marketSum":242445,"quant":17028949},
+                {"itemcode":"360750","itemname":"TIGER 미국S&P500","nav":27320.0,"etfTabCode":4,"marketSum":205154,"quant":26019361}
             ]}}
         """.trimIndent()
         val eucKrBytes = json.toByteArray(Charset.forName("EUC-KR"))
@@ -51,7 +51,10 @@ class NaverEtfListClientTest {
         assertEquals(2, result.size)
         assertEquals("069500", result[0].symbol)
         assertEquals("KODEX 200", result[0].name)
+        assertEquals(1, result[0].tabCode)
+        assertEquals(242445L, result[0].marketSum)
         assertEquals("360750", result[1].symbol)
         assertEquals("TIGER 미국S&P500", result[1].name)
+        assertEquals(4, result[1].tabCode)
     }
 }

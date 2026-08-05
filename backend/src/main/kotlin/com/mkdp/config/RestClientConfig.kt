@@ -42,4 +42,16 @@ class RestClientConfig {
             .requestFactory(requestFactory)
             .build()
     }
+
+    @Bean
+    fun naverRankingRestClient(properties: NaverFinanceProperties): RestClient {
+        val requestFactory = SimpleClientHttpRequestFactory().apply {
+            setConnectTimeout(5_000)
+            setReadTimeout(15_000)
+        }
+        return RestClient.builder()
+            .baseUrl(properties.rankingBaseUrl)
+            .requestFactory(requestFactory)
+            .build()
+    }
 }

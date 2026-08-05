@@ -33,3 +33,31 @@ export interface BacktestResult {
   mddPct: number
   series: BacktestPoint[]
 }
+
+export interface DiscoveryItem {
+  symbol: string
+  name: string
+  type: AssetType
+  marketValue: number | null
+  tradingVolume: number | null
+  changeRatePct: number | null
+}
+
+export interface EtfCategory {
+  tabCode: number
+  label: string
+}
+
+export interface PresetHolding {
+  symbol: string
+  weight: number
+  name: string
+  type: AssetType
+}
+
+export interface PortfolioPreset {
+  key: string
+  label: string
+  description: string
+  holdings: PresetHolding[]
+}

@@ -34,4 +34,11 @@ class AssetSearchService(
             .map { AssetSummary(symbol = it.symbol, name = it.name, type = AssetType.ETF) }
         return (stocks + etfResults).sortedBy { it.name }.take(size)
     }
+
+    /** 심볼로 주식 또는 ETF를 찾는다 — 포트폴리오 프리셋의 이름/타입을 실시간 DB 기준으로 채울 때 쓴다. */
+    fun resolve(symbol: String): AssetSummary? {
+        companies.findByStockCode(symbol)?.let { return AssetSummary(symbol, it.corpName, AssetType.STOCK) }
+        etfs.findBySymbol(symbol)?.let { return AssetSummary(symbol, it.name, AssetType.ETF) }
+        return null
+    }
 }

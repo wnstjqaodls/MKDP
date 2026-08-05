@@ -5,7 +5,14 @@ import type {
   DisclosurePage,
   FinancialSummary,
 } from '@/types/company'
-import type { AssetSummary, BacktestRequest, BacktestResult } from '@/types/portfolio'
+import type {
+  AssetSummary,
+  BacktestRequest,
+  BacktestResult,
+  DiscoveryItem,
+  EtfCategory,
+  PortfolioPreset,
+} from '@/types/portfolio'
 
 const http = axios.create({ baseURL: '/api' })
 
@@ -54,5 +61,27 @@ export const assetApi = {
 export const backtestApi = {
   run(request: BacktestRequest) {
     return http.post<BacktestResult>('/backtest', request).then((res) => res.data)
+  },
+}
+
+export const discoveryApi = {
+  stocks(market: 'KOSPI' | 'KOSDAQ', sort: 'marketcap' | 'volume', limit = 20) {
+    return http
+      .get<DiscoveryItem[]>('/discovery/stocks', { params: { market, sort, limit } })
+      .then((res) => res.data)
+  },
+
+  etfCategories() {
+    return http.get<EtfCategory[]>('/discovery/etf-categories').then((res) => res.data)
+  },
+
+  etfs(tabCode: number, sort: 'marketcap' | 'volume', limit = 20) {
+    return http.get<DiscoveryItem[]>('/discovery/etfs', { params: { tabCode, sort, limit } }).then((res) => res.data)
+  },
+}
+
+export const presetApi = {
+  list() {
+    return http.get<PortfolioPreset[]>('/portfolio-presets').then((res) => res.data)
   },
 }

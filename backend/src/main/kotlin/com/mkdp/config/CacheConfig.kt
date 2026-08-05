@@ -30,6 +30,10 @@ class CacheConfig {
             "disclosures",
             Caffeine.newBuilder().maximumSize(2_000).expireAfterWrite(Duration.ofMinutes(10)).build(),
         )
+        manager.registerCustomCache(
+            "discoveryRankings",
+            Caffeine.newBuilder().maximumSize(100).expireAfterWrite(Duration.ofMinutes(20)).build(),
+        )
         return manager
     }
 }

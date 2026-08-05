@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { backtestApi, extractErrorMessage } from '@/api/client'
-import type { AssetSummary, BacktestResult } from '@/types/portfolio'
+import type { AssetSummary, BacktestResult, PortfolioPreset } from '@/types/portfolio'
 
 export interface CartItem extends AssetSummary {
   weight: number
@@ -26,6 +26,52 @@ function defaultEndDate(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
+/** 비중 합이 항상 100이 되도록, 바뀐 항목을 뺀 나머지를 기존 비율 그대로 재분배한다. */
+function redistribute(items: CartItem[], changedSymbol: string, newWeight: number) {
+  const clamped = Math.max(0, Math.min(100, newWeight))
+  const others = items.filter((item) => item.symbol !== changedSymbol)
+  const remaining = 100 - clamped
+  const othersSum = others.reduce((sum, item) => sum + item.weight, 0)
+
+  if (others.length === 0) {
+    // 종목이 하나뿐이면 100%로 고정
+  } else if (othersSum <= 0) {
+    const equalShare = remaining / others.length
+    others.forEach((item) => (item.weight = equalShare))
+  } else {
+    others.forEach((item) => (item.weight = (item.weight / othersSum) * remaining))
+  }
+
+  const target = items.find((item) => item.symbol === changedSymbol)
+  if (target) target.weight = items.length === 1 ? 100 : clamped
+}
+
+/** 새 항목이 균등한 몫을 가져가도록 나머지를 비례 축소한다. */
+function redistributeForNewItem(items: CartItem[]) {
+  const count = items.length
+  if (count === 0) return
+  const newShare = 100 / count
+  const existing = items.slice(0, count - 1)
+  const existingSum = existing.reduce((sum, item) => sum + item.weight, 0)
+  if (existingSum > 0) {
+    const remaining = 100 - newShare
+    existing.forEach((item) => (item.weight = (item.weight / existingSum) * remaining))
+  }
+  items[count - 1].weight = newShare
+}
+
+/** 항목 제거 후 남은 비중의 합이 100이 되도록 비례 확대한다. */
+function redistributeAfterRemoval(items: CartItem[]) {
+  if (items.length === 0) return
+  const sum = items.reduce((s, item) => s + item.weight, 0)
+  if (sum <= 0) {
+    const equalShare = 100 / items.length
+    items.forEach((item) => (item.weight = equalShare))
+  } else if (Math.abs(sum - 100) > 0.001) {
+    items.forEach((item) => (item.weight = (item.weight / sum) * 100))
+  }
+}
+
 export const usePortfolioStore = defineStore('portfolio', {
   state: (): PortfolioState => ({
     items: [],
@@ -44,16 +90,23 @@ export const usePortfolioStore = defineStore('portfolio', {
   actions: {
     add(asset: AssetSummary) {
       if (this.items.some((item) => item.symbol === asset.symbol)) return
-      this.items.push({ ...asset, weight: 10 })
+      this.items.push({ ...asset, weight: 0 })
+      redistributeForNewItem(this.items)
     },
 
     remove(symbol: string) {
       this.items = this.items.filter((item) => item.symbol !== symbol)
+      redistributeAfterRemoval(this.items)
     },
 
-    setWeight(symbol: string, weight: number) {
-      const item = this.items.find((i) => i.symbol === symbol)
-      if (item) item.weight = Math.max(0, weight)
+    /** 슬라이더로 비중을 바꾼다 — 나머지 종목이 기존 비율대로 자동 조정되어 합계는 항상 100%. */
+    adjustWeight(symbol: string, weight: number) {
+      redistribute(this.items, symbol, weight)
+    },
+
+    applyPreset(preset: PortfolioPreset) {
+      this.items = preset.holdings.map((h) => ({ symbol: h.symbol, name: h.name, type: h.type, weight: h.weight }))
+      this.result = null
     },
 
     clear() {

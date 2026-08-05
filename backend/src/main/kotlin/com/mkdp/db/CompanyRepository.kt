@@ -42,6 +42,13 @@ class CompanyRepository(private val jdbc: NamedParameterJdbcTemplate) {
             mapper,
         ).firstOrNull()
 
+    fun findByStockCode(stockCode: String): CompanyRow? =
+        jdbc.query(
+            "SELECT corp_code, corp_name, stock_code, modify_date FROM company WHERE stock_code = :stockCode",
+            mapOf("stockCode" to stockCode),
+            mapper,
+        ).firstOrNull()
+
     fun count(): Long =
         jdbc.jdbcTemplate.queryForObject("SELECT COUNT(*) FROM company", Long::class.java) ?: 0L
 

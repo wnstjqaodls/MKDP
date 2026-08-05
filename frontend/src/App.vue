@@ -14,7 +14,7 @@ const portfolio = usePortfolioStore()
         </RouterLink>
         <nav class="flex items-center gap-4 text-sm text-slate-600">
           <RouterLink to="/companies" class="hover:text-slate-900">자산 검색</RouterLink>
-          <RouterLink to="/backtest" class="relative flex items-center gap-1.5 hover:text-slate-900">
+          <RouterLink to="/portfolio" class="relative flex items-center gap-1.5 hover:text-slate-900">
             포트폴리오
             <span
               v-if="portfolio.items.length"
