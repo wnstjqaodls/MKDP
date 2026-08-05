@@ -21,7 +21,7 @@ function onInput() {
     <input
       v-model="query"
       type="text"
-      placeholder="기업명 또는 종목코드로 검색 (예: 삼성전자, 005930)"
+      placeholder="기업명 또는 종목코드 검색"
       class="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm shadow-sm focus:border-slate-400 focus:outline-none"
       @input="onInput"
       @keyup.enter="emit('search', query)"

@@ -43,7 +43,7 @@ function add(asset: AssetSummary) {
     <input
       v-model="query"
       type="text"
-      placeholder="종목명 또는 코드로 검색해서 바로 담기 (예: 삼성전자, KODEX)"
+      placeholder="종목명 또는 코드 검색"
       class="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm shadow-sm focus:border-slate-400 focus:outline-none"
       @input="onInput"
       @focus="showResults = true"

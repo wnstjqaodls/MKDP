@@ -37,7 +37,7 @@ const canRunBacktest = computed(() => portfolio.items.length > 0 && !portfolio.r
     </div>
 
     <div v-if="portfolio.items.length === 0" class="rounded-lg border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500">
-      위에서 추천 포트폴리오를 고르거나, 검색해서 종목을 담아주세요.
+      담은 종목이 없습니다.
     </div>
 
     <template v-else>
@@ -50,7 +50,7 @@ const canRunBacktest = computed(() => portfolio.items.length > 0 && !portfolio.r
         </div>
 
         <!-- 비중 한눈에 보기: 누적 막대 -->
-        <div class="mb-4 flex h-3 w-full overflow-hidden rounded-full bg-slate-100">
+        <div class="mb-4 flex h-3 w-full overflow-hidden rounded bg-slate-100">
           <div
             v-for="(item, i) in portfolio.items"
             :key="item.symbol"
@@ -89,9 +89,6 @@ const canRunBacktest = computed(() => portfolio.items.length > 0 && !portfolio.r
             </button>
           </li>
         </ul>
-        <p class="mt-2 text-xs text-slate-400">
-          슬라이더를 움직이면 나머지 종목의 비중이 비율대로 자동 조정돼 합계는 항상 100%로 유지됩니다.
-        </p>
       </div>
 
       <div class="rounded-lg border border-slate-200 bg-white p-4">
