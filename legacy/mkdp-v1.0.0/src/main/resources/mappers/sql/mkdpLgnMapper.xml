@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="mappers.sql.mkdpLgnMapper">
+
+	<!--
+	 * ====================================================================
+	 *  MKDP 회원 정보 				: 조회
+	 * ====================================================================
+	 * selectUserInfo				: 사용자 정보 (조회)
+	 * ====================================================================
+	-->
+
+	<select id="selectUserInfo" parameterType="map" resultType="map">
+		/* sql-id : FrmAppMsdMapper.selectUserInfo */
+		<![CDATA[
+		 	SELECT 
+		 	KIWOOM_ID
+		   ,KIWOOM_ACCOUNT
+		   ,KIWOOM_PASSWORD 
+		   ,MEM_NAME       
+		   ,MEM_BIRTH      
+		   ,MEM_JOIN_DATE   
+		   ,MEM_EDIT_DATE   
+		   ,MEM_ST_CD      
+		   ,MEM_MOBILE_NUM  
+		   ,IP_ADDRESS    
+		   ,FINAL_ACCESS_DATE
+		   ,ACCESS_TYPE     
+		 	FROM MKDP.MEMBER
+		]]>
+	</select>
+
+</mapper>
+
+
+

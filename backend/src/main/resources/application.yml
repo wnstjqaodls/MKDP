@@ -1,0 +1,33 @@
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  port: ${SERVER_PORT:4180}
+
+spring:
+  application:
+    name: mkdp
+  datasource:
+    url: ${DB_URL:jdbc:h2:file:./data/mkdp;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+    driver-class-name: ${DB_DRIVER:org.h2.Driver}
+  flyway:
+    enabled: true
+  jackson:
+    default-property-inclusion: non_null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+dart:
+  api-key: ${DART_API_KEY:}
+  base-url: ${DART_BASE_URL:https://opendart.fss.or.kr/api}
+
+mkdp:
+  sync-token: ${SYNC_TOKEN:}

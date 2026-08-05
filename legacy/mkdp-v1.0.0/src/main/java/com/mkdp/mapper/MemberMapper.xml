@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mkdp.mapper.MemberMapper">
+	<resultMap type="com.mkdp.vo.MemberVO" id="memberMap">
+		<result property="mem_id"         column="mem_id"/>
+		<result property="mem_account"    column="mem_account"/>
+		<result property="mem_password"   column="mem_password"/>
+		<result property="mem_name"          column="mem_name"/>
+		<result property="mem_birth"         column="mem_birth"/>
+		<result property="mem_join_date"     column="mem_join_date"/>
+		<result property="mem_edit_date"     column="mem_edit_date"/>
+		<result property="mem_st_cd"         column="mem_st_cd"/>
+		<result property="mem_mobile_num"    column="mem_mobile_num"/>
+		<result property="ip_address"        column="ip_address"/>
+		<result property="final_access_date" column="final_access_date"/>
+		<result property="access_type"	     column="access_type"/>
+	</resultMap>
+	
+	<select id="getMemberInfo" resultMap="memberMap" parameterType="java.util.concurrent.ConcurrentHashMap">
+	SELECT mem_id,
+		mem_account,
+		mem_password,
+		mem_name,
+		mem_birth,
+		mem_join_date,
+		mem_edit_date,
+		mem_st_cd,
+		mem_mobile_num,
+		ip_address,
+		final_access_date,
+		access_type
+		FROM MKDP.MEMBER
+		WHERE mem_emailAddress = #{emailId}
+	</select>
+</mapper>

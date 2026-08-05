@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mkdp.mapper.MemberMapper">
+	
+	<update id="updateCompanies" parameterType="java.util.List">
+    INSERT INTO COMPANY_INFO (CORP_CODE, CORP_NAME, stock_code, modify_date)
+    VALUES (#{crop_code}, #{corp_name}, #{stock_code}, #{modify_date})
+    ON DUPLICATE KEY UPDATE
+    CORP_CODE = #{crop_code},
+    CORP_NAME = #{corp_name}, 
+    stock_code = #{stock_code},
+    modify_date = #{modify_date}
+	</update>
+</mapper>
