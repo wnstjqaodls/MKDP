@@ -5,6 +5,7 @@ import type {
   DisclosurePage,
   FinancialSummary,
 } from '@/types/company'
+import type { AssetSummary, BacktestRequest, BacktestResult } from '@/types/portfolio'
 
 const http = axios.create({ baseURL: '/api' })
 
@@ -41,5 +42,17 @@ export const companyApi = {
     return http
       .get<FinancialSummary>(`/companies/${corpCode}/financials`, { params: { year, reprtCode } })
       .then((res) => res.data)
+  },
+}
+
+export const assetApi = {
+  search(q: string, page = 0, size = 20) {
+    return http.get<AssetSummary[]>('/assets', { params: { q, page, size } }).then((res) => res.data)
+  },
+}
+
+export const backtestApi = {
+  run(request: BacktestRequest) {
+    return http.post<BacktestResult>('/backtest', request).then((res) => res.data)
   },
 }

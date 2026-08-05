@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.mkdp"
-version = "2.0.0-SNAPSHOT"
+version = "3.0.0-SNAPSHOT"
 
 java {
     toolchain {
@@ -32,7 +32,7 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("org.springframework.boot:spring-boot-starter-cache")
 
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("com.h2database:h2:2.3.232")
     runtimeOnly("org.postgresql:postgresql")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")

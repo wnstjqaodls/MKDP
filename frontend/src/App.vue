@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { usePortfolioStore } from '@/stores/portfolio'
+
+const portfolio = usePortfolioStore()
 </script>
 
 <template>
@@ -9,8 +12,17 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/" class="text-lg font-semibold tracking-tight">
           MKDP <span class="text-slate-400 font-normal">· 공시 조회</span>
         </RouterLink>
-        <nav class="text-sm text-slate-600">
-          <RouterLink to="/companies" class="hover:text-slate-900">기업 검색</RouterLink>
+        <nav class="flex items-center gap-4 text-sm text-slate-600">
+          <RouterLink to="/companies" class="hover:text-slate-900">자산 검색</RouterLink>
+          <RouterLink to="/backtest" class="relative flex items-center gap-1.5 hover:text-slate-900">
+            포트폴리오
+            <span
+              v-if="portfolio.items.length"
+              class="flex h-5 min-w-5 items-center justify-center rounded-full bg-slate-900 px-1 text-xs font-semibold text-white"
+            >
+              {{ portfolio.items.length }}
+            </span>
+          </RouterLink>
         </nav>
       </div>
     </header>

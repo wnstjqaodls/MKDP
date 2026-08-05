@@ -1,18 +1,8 @@
 import { defineStore } from 'pinia'
 import { companyApi, extractErrorMessage } from '@/api/client'
-import type {
-  CompanyOverview,
-  CompanySummary,
-  DisclosurePage,
-  FinancialSummary,
-} from '@/types/company'
+import type { CompanyOverview, DisclosurePage, FinancialSummary } from '@/types/company'
 
 interface CompanyState {
-  searchQuery: string
-  searchResults: CompanySummary[]
-  searching: boolean
-  searchError: string | null
-
   overview: CompanyOverview | null
   disclosures: DisclosurePage | null
   financials: FinancialSummary | null
@@ -22,11 +12,6 @@ interface CompanyState {
 
 export const useCompanyStore = defineStore('company', {
   state: (): CompanyState => ({
-    searchQuery: '',
-    searchResults: [],
-    searching: false,
-    searchError: null,
-
     overview: null,
     disclosures: null,
     financials: null,
@@ -35,25 +20,6 @@ export const useCompanyStore = defineStore('company', {
   }),
 
   actions: {
-    async search(query: string) {
-      this.searchQuery = query
-      if (!query.trim()) {
-        this.searchResults = []
-        this.searchError = null
-        return
-      }
-      this.searching = true
-      this.searchError = null
-      try {
-        this.searchResults = await companyApi.search(query)
-      } catch (err) {
-        this.searchError = extractErrorMessage(err)
-        this.searchResults = []
-      } finally {
-        this.searching = false
-      }
-    },
-
     async loadDetail(corpCode: string, year: number) {
       this.detailLoading = true
       this.detailError = null

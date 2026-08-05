@@ -4,6 +4,7 @@ import com.mkdp.config.DartProperties
 import com.mkdp.dart.dto.DartCompanyOverviewResponse
 import com.mkdp.dart.dto.DartDisclosureListResponse
 import com.mkdp.dart.dto.DartFinancialResponse
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 
@@ -15,7 +16,7 @@ import org.springframework.web.client.RestClient
  */
 @Component
 class DartClient(
-    private val restClient: RestClient,
+    @Qualifier("dartRestClient") private val restClient: RestClient,
     private val properties: DartProperties,
 ) {
     fun companyOverview(corpCode: String): DartCompanyOverviewResponse {
