@@ -137,8 +137,10 @@ Lombok `@Data`가 생성했을 `setResult`/`setSuccess`를 손으로 쓴 빈 오
 ### 5. 시크릿이 소스에 그대로 커밋돼 있었다
 
 - DART 인증키가 `BusinessController`에 상수로 하드코딩(`CERTIFICATION_KEY`)
-- `env/system.properties`에 GCP MySQL 접속 정보(`34.64.82.250:3306`, `root`)가
-  평문으로 커밋 — public 리포에 2년 넘게 노출된 상태
+- `env/system.properties`에 GCP MySQL 접속 정보(호스트·계정)가 평문으로 커밋 —
+  public 리포에 2년 넘게 노출된 상태. 2026-08 GCP 인스턴스를 폐기하고 리포에서
+  접속 정보를 제거했다(`root-context.xml`에는 별도로 사설망 SQL Server 접속
+  정보도 평문으로 남아있어 같이 제거·비밀번호 교체함)
 
 **v2의 대응**: DART 키는 `DartProperties`를 통해 환경변수(`DART_API_KEY`)로만
 주입하고 소스에는 절대 넣지 않는다. DB 접속 정보도 배포 시 생성되는

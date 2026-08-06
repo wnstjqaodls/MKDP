@@ -21,16 +21,12 @@
 	
 	<context:property-placeholder location="classpath:/env/system.properties" />
 	
-	<!-- mysql JDBC DataSource -->
+	<!-- JDBC DataSource — 2026-08 접속 정보 보안상 제거(GCP MySQL 인스턴스는 폐기, 사설망 SQL Server 비밀번호는 교체됨) -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" lazy-init="false">
 		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-		<property name="url" value="jdbc:sqlserver://192.168.50.1:1433" />
-		<property name="username" value="subkim" />
-		<property name="password" value="5488" />
-		<!-- <property name="url" value="jdbc:mysql://34.64.133.169:3306/" />
-		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-		<property name="username" value="root" />
-		<property name="password" value="" /> -->
+		<property name="url" value="" />
+		<property name="username" value="" />
+		<property name="password" value="" />
 	</bean>
 
 	<!-- mybatis SqlSessionFactoryBean -->
