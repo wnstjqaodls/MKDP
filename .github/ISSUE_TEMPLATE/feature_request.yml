@@ -1,0 +1,36 @@
+name: 기능 제안
+description: 새 기능이나 개선을 제안한다.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: background
+    attributes:
+      label: 배경
+      description: 어떤 한계나 요구에서 출발했는지 적는다.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 제안
+      description: 무엇을 어떻게 바꿀지 적는다. API 형태가 바뀐다면 요청/응답 예시를 포함한다.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 대안
+      description: 검토했지만 택하지 않은 방식과 그 이유.
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 완료 조건
+      value: |
+        - [ ]
+    validations:
+      required: true

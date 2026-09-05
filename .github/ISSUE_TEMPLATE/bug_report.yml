@@ -1,0 +1,46 @@
+name: 버그 리포트
+description: 동작이 기대와 다른 지점을 보고한다.
+labels: [bug]
+body:
+  - type: textarea
+    id: background
+    attributes:
+      label: 배경
+      description: 어느 코드에서 무엇을 하려다 발견했는지 적는다. 가능하면 `파일:줄` 형태로 지목한다.
+      placeholder: |
+        backend/src/main/kotlin/com/mkdp/domain/DiscoveryService.kt:30
+    validations:
+      required: true
+
+  - type: textarea
+    id: symptom
+    attributes:
+      label: 현상
+      description: 재현 절차와 실제 결과를 적는다. 요청/응답이 있으면 그대로 붙인다.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대 동작
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 제안
+      description: 수정 방향이 정해졌다면 적는다. 없으면 비워둔다.
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 완료 조건
+      value: |
+        - [ ]
+    validations:
+      required: true
