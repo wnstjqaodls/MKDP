@@ -1,5 +1,12 @@
 # MKDP — 공시 조회 + 포트폴리오 백테스트 서비스
 
+[![CI](https://github.com/wnstjqaodls/side-market-data-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/wnstjqaodls/side-market-data-platform/actions/workflows/ci.yml)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.0-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vuedotjs&logoColor=white)](https://vuejs.org)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 **Live demo: https://mkdp.qwer4.org**
 
 DART(금융감독원 전자공시시스템) 오픈API로 기업 공시·재무를 조회하고, 주식과
@@ -91,7 +98,15 @@ curl -X POST -H "X-Sync-Token: <SYNC_TOKEN>" http://localhost:4180/api/admin/etf
 일별 시세는 동기화 없이 백테스트 요청 시점에 온디맨드로 캐시된다(첫 조회만 느리고
 이후는 DB 캐시를 사용).
 
+## 기여
+
+브랜치·커밋·PR 규칙과 코드 규칙은 [`CONTRIBUTING.md`](CONTRIBUTING.md)에 정리했다.
+버그와 개선 제안은 [Issues](https://github.com/wnstjqaodls/side-market-data-platform/issues)로 받는다.
+
 ## 라이선스 / 데이터 출처
 
-DART(금융감독원 전자공시시스템) 오픈API, 네이버 금융 비공식 엔드포인트(일별 시세,
-ETF 목록)를 사용한다.
+코드는 [MIT 라이선스](LICENSE)를 따른다.
+
+데이터는 DART(금융감독원 전자공시시스템) 오픈API와 네이버 금융 비공식 엔드포인트(일별
+시세, ETF 목록)에서 가져온다. 네이버 금융은 공개된 공식 API가 아니므로 응답 형식이
+예고 없이 바뀔 수 있다 — 이 서비스는 학습·데모 목적이며 투자 판단의 근거로 쓸 수 없다.
